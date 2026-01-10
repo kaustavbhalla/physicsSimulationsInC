@@ -4,7 +4,7 @@
 
 #define THICK 5
 #define MASS_WIDTH 100
-#define PI 3.141592
+
 #define FPS 60
 
 void floorDraw(int HEIGHT, int WIDTH) {
@@ -32,7 +32,8 @@ int main() {
 
   double x = ((double)WIDTH / 2) - ((double)MASS_WIDTH / 2);
   float dt;
-  SetTargetFPS(FPS);
+  float v = 20;
+  // SetTargetFPS(FPS);
 
   // Start drawing loop
   while (!WindowShouldClose()) {
@@ -43,9 +44,12 @@ int main() {
 
     ClearBackground(BLACK);
     floorDraw(HEIGHT, WIDTH);
-    massDraw(HEIGHT, WIDTH, x++);
-    DrawFPS(10, 10);
+
     dt = GetFrameTime();
+    x += v * dt;
+    massDraw(HEIGHT, WIDTH, x);
+    DrawFPS(10, 10);
+
     DrawText("Spring Mass system simulator goes here!", WIDTH / 10, 100, 30,
              GREEN);
 
