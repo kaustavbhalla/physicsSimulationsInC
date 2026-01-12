@@ -7,7 +7,11 @@
 #define FPS 240
 #define NUM_SPRING_ELEMENTS 16
 #define SPRING_ELEM_LENGTH 60
-float x_mass = 0;
+#define K 10
+#define FRICTION 10
+
+float v = 80;
+float a = 2;
 
 typedef struct {
   Vector2 start, end;
@@ -15,7 +19,7 @@ typedef struct {
 
 SpringEl springElements[NUM_SPRING_ELEMENTS];
 
-void springDraw(int HEIGHT, int WIDTH) {
+void springDraw(int HEIGHT, int WIDTH, float x_mass) {
   float x_springdelta = x_mass / NUM_SPRING_ELEMENTS;
   float y_end = sqrt(pow(SPRING_ELEM_LENGTH, 2) - pow(x_springdelta, 2));
 
@@ -41,7 +45,7 @@ void floorDraw(int HEIGHT, int WIDTH) {
   DrawLineEx(start, end, THICK, GRAY);
 }
 
-void massDraw(int HEIGHT, int WIDTH) {
+void massDraw(int HEIGHT, int WIDTH, float x_mass) {
   Rectangle rect = {x_mass, (HEIGHT * 0.6) - MASS_WIDTH - (float)THICK / 2,
                     MASS_WIDTH, MASS_WIDTH};
   DrawRectangleRec(rect, RED);
@@ -59,8 +63,9 @@ int main() {
   InitWindow(WIDTH, HEIGHT, "Spring Mass System Simulator");
 
   float dt;
-  float v = 40;
   SetTargetFPS(FPS);
+  float x_mass = (float)WIDTH / 2;
+  float X_REST = (float)WIDTH / 3;
 
   // Start drawing loop
   while (!WindowShouldClose()) {
@@ -73,9 +78,12 @@ int main() {
     floorDraw(HEIGHT, WIDTH);
 
     dt = GetFrameTime();
+    float fric = v > 0 ? -FRICTION : FRICTION;
+    a = (-K * (x_mass - X_REST)) + fric;
+    v += a * dt;
     x_mass += v * dt;
-    massDraw(HEIGHT, WIDTH);
-    springDraw(HEIGHT, WIDTH);
+    massDraw(HEIGHT, WIDTH, x_mass);
+    springDraw(HEIGHT, WIDTH, x_mass);
     DrawFPS(10, 10);
 
     DrawText("Spring Mass system simulator goes here!", WIDTH / 10, 100, 30,
