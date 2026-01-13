@@ -148,10 +148,3 @@ Free to use for educational and personal projects.
 Kaustav Bhalla
 
 ---
-
-If you'd like, I can also generate:
-
-- A version with realistic damping
-- Energy visualization
-- Interactive sliders
-- Or convert this into a full physics lab demo 👨‍🔬
